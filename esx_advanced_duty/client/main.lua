@@ -18,18 +18,18 @@ Citizen.CreateThread(function()
 		Citizen.Wait(100)
 	end
 
-  ESX.GetPlayerData() = ESX.GetPlayerData()
+  ESX.PlayerData = ESX.GetPlayerData()
 end)
 
 
 RegisterNetEvent('esx:playerLoaded')
 AddEventHandler('esx:playerLoaded', function(xPlayer)
-  ESX.GetPlayerData() = xPlayer
+  ESX.PlayerData = xPlayer
 end)
 
 RegisterNetEvent('esx:setJob')
 AddEventHandler('esx:setJob', function(job)
-  ESX.GetPlayerData().job = job
+	ESX.PlayerData.job = job
 end)
 
 ----markers
@@ -55,7 +55,7 @@ Citizen.CreateThread(function ()
 
     for k,v in pairs(Config.Zones) do
       if(GetDistanceBetweenCoords(coords, v.Pos.x, v.Pos.y, v.Pos.z, true) < 50.0) then
-        local jobName = ESX.GetPlayerData().job.name
+        local jobName = ESX.PlayerData.job.name
 
         if string.match(jobName, "off") then jobName = jobName:gsub("%off", "") end
 
@@ -90,6 +90,7 @@ end)
 
 
 
+
 --keycontrols
 Citizen.CreateThread(function ()
   while true do
@@ -98,10 +99,12 @@ Citizen.CreateThread(function ()
     if CurrentAction ~= nil then
       ESX.ShowHelpNotification(CurrentActionMsg, true)
 
-      if IsControlPressed(0, 38) then
+      if IsControlJustReleased(0, 38) then
         TriggerServerEvent('esx_advanced_duty:changeDutyStatus')
       end
 
+      CurrentActionData, CurrentActionMsg = {}, ''
+      CurrentAction     = nil
     end
   end
 
@@ -118,7 +121,7 @@ Citizen.CreateThread(function ()
     for k,v in pairs(Config.Zones) do
       if(GetDistanceBetweenCoords(coords, v.Pos.x, v.Pos.y, v.Pos.z, true) < Config.DrawDistance) then
 
-        local jobName = ESX.GetPlayerData().job.name
+        local jobName = ESX.PlayerData.job.name
         if string.match(jobName, "off") then jobName = jobName:gsub("%off", "") end
 
         if v.JobRequired == jobName then
