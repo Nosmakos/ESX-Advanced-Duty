@@ -16,6 +16,7 @@ AddEventHandler('esx_advanced_duty:changeDutyStatus', function()
             jobName = jobName:gsub("%off", "") xPlayer.setJob(jobName, xPlayer.job.grade)
 
             TriggerClientEvent('esx:showNotification', _source, _U('onduty'))
+            return
         else
             xPlayer.setJob('off' .. jobName, xPlayer.job.grade)
 
