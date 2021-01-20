@@ -39,7 +39,8 @@ AddEventHandler('esx_advanced_duty:hasEnteredMarker', function (zone)
 end)
 
 AddEventHandler('esx_advanced_duty:hasExitedMarker', function (zone)
-  CurrentAction = nil
+  CurrentActionData, CurrentActionMsg = {}, ''
+  CurrentAction     = nil
 end)
 
 
@@ -54,7 +55,7 @@ Citizen.CreateThread(function ()
     local sleep = true
 
     for k,v in pairs(Config.Zones) do
-      if(GetDistanceBetweenCoords(coords, v.Pos.x, v.Pos.y, v.Pos.z, true) < 50.0) then
+      if(GetDistanceBetweenCoords(coords, v.Pos.x, v.Pos.y, v.Pos.z, true) < 1.5) then
         local jobName = ESX.PlayerData.job.name
 
         if string.match(jobName, "off") then jobName = jobName:gsub("%off", "") end
@@ -75,10 +76,12 @@ Citizen.CreateThread(function ()
       HasAlreadyEnteredMarker = true
       LastZone                = currentZone
       TriggerEvent('esx_advanced_duty:hasEnteredMarker', currentZone)
+      print("2")
     end
 
     if not isInMarker and HasAlreadyEnteredMarker then
       HasAlreadyEnteredMarker = false
+      print("1")
       TriggerEvent('esx_advanced_duty:hasExitedMarker', LastZone)
     end
 
